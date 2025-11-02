@@ -1,58 +1,110 @@
+# ☁️ Cloud Music Platform – AWS CDK Backend
 
-# Welcome to your CDK Python project!
+This repository contains the **Infrastructure as Code (IaC)** and **Lambda backend services** for the **Cloud Music Streaming Platform**.
 
-This is a blank project for CDK development with Python.
+The backend is built using the **AWS Cloud Development Kit (CDK)** in **Python**, following **cloud-native architecture** principles.  
+It provisions all required AWS services and deploys Lambda functions, APIs, and other resources automatically.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+---
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+## 🎯 Project Overview
 
-To manually create a virtualenv on MacOS and Linux:
+The system is a **cloud-native music streaming web application** that enables users to:
+- Store, share, and listen to music content through the cloud.
+- Access personalized recommendations and subscriptions.
+- Manage offline playback and notifications.
 
+### 👥 User Roles
+| Role | Description |
+|------|--------------|
+| **Guest** | Can register and log in. |
+| **Regular User** | Can browse, filter, and rate songs, subscribe to artists or genres, receive notifications, and manage offline playback. |
+| **Administrator** | Can upload, edit, and delete songs, albums, and artist data. |
+
+---
+
+## 🏗️ Architecture Overview
+
+The system follows a **cloud-native, event-driven architecture** using AWS managed services:
+
+| Component | AWS Service | Purpose |
+|------------|-------------|----------|
+| **Authentication** | Amazon Cognito | Manages user registration, login, and token validation. |
+| **Storage** | Amazon S3 | Stores audio files, album covers, and other media content. |
+| **Metadata** | Amazon DynamoDB | Stores metadata about songs, artists, genres, and ratings. |
+| **APIs** | Amazon API Gateway | Entry point for client requests, exposing REST endpoints. |
+| **Business Logic** | AWS Lambda | Implements core logic for content management and subscriptions. |
+| **Notifications** | Amazon SNS / WebSocket | Sends real-time or email notifications to subscribed users. |
+| **Queues (Async)** | Amazon SQS | Handles asynchronous communication and decoupling between services. |
+| **Transcription (Optional)** | Amazon Transcribe | Generates lyrics automatically for uploaded audio files. |
+| **Frontend Hosting** | S3 + CloudFront | Hosts the React/Angular web client (deployed separately). |
+
+---
+
+## ⚙️ Development Setup
+
+### 1️⃣ Create and activate virtual environment
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Mac/Linux
+.venv\Scripts\activate.bat  # Windows
 ```
-$ python -m venv .venv
+
+### 2️⃣ Install dependencies
+```bash
+pip install -r requirements.txt
 ```
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
-
-```
-$ source .venv/bin/activate
+### 3️⃣ Synthesize CloudFormation templates
+```bash
+cdk synth
 ```
 
-If you are a Windows platform, you would activate the virtualenv like this:
-
-```
-% .venv\Scripts\activate.bat
-```
-
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
-$ pip install -r requirements.txt
+### 4️⃣ Deploy to AWS
+```bash
+cdk deploy
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
+### 5️⃣ Useful CDK Commands
+| Command | Description |
+|----------|-------------|
+| `cdk ls` | List all stacks |
+| `cdk synth` | Generate CloudFormation template |
+| `cdk deploy` | Deploy the stack to AWS |
+| `cdk diff` | Compare current and deployed state |
+| `cdk destroy` | Remove all deployed resources |
 
-```
-$ cdk synth
-```
+---
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+## 🧠 Key Features (from Specification)
 
-## Useful commands
+✅ **User Registration and Login (Cognito)**  
+✅ **Artist and Song Management (S3 + DynamoDB)**  
+✅ **Filtering / Discover Page (Genre-based)**  
+✅ **Subscriptions with Notifications (SNS / SQS)**  
+✅ **Offline Playback (S3 Presigned URLs)**  
+✅ **Rating and Personalized Feed (Lambda logic + DynamoDB)**  
+✅ **Infrastructure as Code (AWS CDK – imperative)**  
+✅ **Event-driven communication**  
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+---
 
-Enjoy!
+## 🚀 Deployment Notes
+- Media upload uses **S3 presigned URLs** to bypass the 10 MB API Gateway limit.  
+- Notification system uses **SNS** for user alerts.  
+- Follow **event-driven principles**: use SQS queues where asynchronous flow makes sense.  
+
+---
+
+## 📘 References
+
+- [AWS Lambda Packaging for Python](https://docs.aws.amazon.com/lambda/latest/dg/python-package.html)  
+- [AWS CDK Documentation](https://docs.aws.amazon.com/cdk/latest/guide/home.html)  
+- [AWS Cognito User Pools vs Identity Pools](https://tutorialsdojo.com/amazon-cognito-user-pools-vs-identity-pools/)  
+- [Serverless Python Requirements Plugin](https://www.serverless.com/plugins/serverless-python-requirements)  
+
+---
+
+## 👩‍💻 Team
+**Role:** Cloud Developer – Team Member  
+**Technologies:** AWS CDK, Lambda, API Gateway, DynamoDB, S3, Cognito, SNS, SQS, CloudFront  
